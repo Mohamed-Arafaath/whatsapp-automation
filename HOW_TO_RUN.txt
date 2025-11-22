@@ -13,15 +13,17 @@ PREREQUISITES
 HOW TO START
 ------------
 
-OPTION 1: Mac / Linux
+OPTION 1: Mac
 1. Open Terminal.
 2. Navigate to this folder.
-3. Run: ./run_mac_linux.sh
-   (This will automatically install everything and start the app)
+3. First time only: Run ./SETUP_MAC.sh
+   (This installs Python, Chrome, and everything else)
+4. To start app: Run ./RUN_MAC.sh
 
 OPTION 2: Windows
-1. Double-click "run_windows.bat"
-   (This will automatically install everything and start the app)
+1. First time only: Double-click "SETUP_WINDOWS.bat"
+   (This installs Python, Chrome, and everything else)
+2. To start app: Double-click "RUN_WINDOWS.bat"
 
 OPTION 3: Manual (Any OS)
 1. Open Terminal/Command Prompt.
