@@ -38,6 +38,14 @@ if %errorlevel% neq 0 (
 
 echo.
 echo Installing Python dependencies...
+
+if not exist "..\..\src\requirements.txt" (
+    echo ❌ Error: Cannot find src\requirements.txt
+    echo ⚠️  Make sure you downloaded the ENTIRE project folder, not just this script!
+    pause
+    exit /b
+)
+
 pip install -r ..\..\src\requirements.txt
 
 echo.
