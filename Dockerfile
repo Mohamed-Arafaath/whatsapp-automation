@@ -27,4 +27,5 @@ COPY . .
 ENV RENDER=true
 
 # Run the application
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:10000", "--timeout", "120"]
+# Use 1 worker to save memory (Chrome is heavy), but 4 threads for concurrency
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:10000", "--workers", "1", "--threads", "4", "--timeout", "300"]
