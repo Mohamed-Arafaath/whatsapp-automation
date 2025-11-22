@@ -142,7 +142,7 @@ class WhatsAppService:
             self.driver.get(url)
             
             # Wait for page to load
-            time.sleep(3)
+            time.sleep(1)  # Optimized: reduced from 3s to 1s
             
             # Check for invalid number
             try:
@@ -180,7 +180,7 @@ class WhatsAppService:
                     pass
             
             if sent:
-                time.sleep(2)
+                time.sleep(0.5)  # Optimized: reduced from 2s to 0.5s
                 self.log(f"✅ Sent to {name}")
                 return True
             else:
@@ -233,7 +233,7 @@ class WhatsAppService:
                 if success:
                     self.progress["sent"] += 1
                     # Random delay
-                    delay = random.uniform(10, 20)
+                    delay = random.uniform(2, 5)  # Optimized: reduced from 10-20s to 2-5s for faster sending
                     self.log(f"Waiting {delay:.1f}s... ({self.progress['sent']}/{self.progress['total']})")
                     
                     # Sleep in small chunks to allow stopping
