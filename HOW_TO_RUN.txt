@@ -1,0 +1,36 @@
+HOW TO RUN THIS APP (Windows & Mac)
+===================================
+
+You can run this WhatsApp Automation app on any computer!
+
+PREREQUISITES
+-------------
+1. Install Python: https://www.python.org/downloads/
+   (Make sure to check "Add Python to PATH" during installation on Windows)
+
+2. Install Google Chrome: https://www.google.com/chrome/
+
+HOW TO START
+------------
+
+OPTION 1: Mac / Linux
+1. Open Terminal.
+2. Navigate to this folder.
+3. Run: ./run_mac_linux.sh
+   (This will automatically install everything and start the app)
+
+OPTION 2: Windows
+1. Double-click "run_windows.bat"
+   (This will automatically install everything and start the app)
+
+OPTION 3: Manual (Any OS)
+1. Open Terminal/Command Prompt.
+2. Install dependencies:
+   pip install -r requirements.txt
+3. Start the app:
+   python app.py
+
+Once running, open your browser and go to:
+http://localhost:5001
+
+ENJOY!
