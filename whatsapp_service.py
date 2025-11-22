@@ -66,11 +66,29 @@ class WhatsAppService:
         try:
             if not self.driver:
                 return False
-            # Check if the chat pane is visible
-            self.driver.find_element(By.XPATH, '//div[@id="pane-side"]')
-            self.is_connected = True
-            return True
-        except:
+                
+            # Check for multiple possible elements that indicate login
+            selectors = [
+                '//div[@id="pane-side"]',  # Chat list
+                '//header//img',           # Profile picture
+                '//div[@contenteditable="true"][@data-tab="3"]', # Search box
+                '//span[@data-icon="chat"]', # New chat icon
+                '//div[@id="side"]'        # Side panel
+            ]
+            
+            for selector in selectors:
+                try:
+                    self.driver.find_element(By.XPATH, selector)
+                    self.is_connected = True
+                    self.log("✅ Connection detected!")
+                    return True
+                except:
+                    continue
+            
+            self.is_connected = False
+            return False
+        except Exception as e:
+            self.log(f"Connection check error: {e}")
             self.is_connected = False
             return False
     
