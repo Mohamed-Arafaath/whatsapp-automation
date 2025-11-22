@@ -5,11 +5,23 @@ import uuid
 from whatsapp_service import WhatsAppService
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
 CORS(app)
+app.secret_key = os.urandom(24)
 
-# Store active services by session ID
+# Ensure upload directory exists
+UPLOAD_FOLDER = './uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Store active services: session_id -> WhatsAppService
 services = {}
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({'success': False, 'error': 'Internal Server Error: ' + str(error)}), 500
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'success': False, 'error': 'Endpoint not found'}), 404
 
 def get_service():
     """Get or create WhatsApp service for current session."""
@@ -33,30 +45,30 @@ def upload():
     """Handle Excel file upload."""
     try:
         if 'file' not in request.files:
-            return jsonify({'success': False, 'error': 'No file uploaded'}), 400
+            return jsonify({'success': False, 'error': 'No file part'}), 400
         
         file = request.files['file']
-        
         if file.filename == '':
-            return jsonify({'success': False, 'error': 'No file selected'}), 400
+            return jsonify({'success': False, 'error': 'No selected file'}), 400
         
-        if not file.filename.endswith(('.xlsx', '.xls')):
-            return jsonify({'success': False, 'error': 'Please upload an Excel file'}), 400
-        
-        # Read file content
-        file_content = file.read()
-        
-        # Load into service
-        service = get_service()
-        success = service.load_contacts(file_content)
-        
-        if success:
-            total = len(service.contacts_df)
-            return jsonify({'success': True, 'total_contacts': total})
-        else:
-            return jsonify({'success': False, 'error': 'Failed to load Excel file'}), 400
+        if file and (file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
+            # Read file into memory
+            file_content = file.read()
             
+            service = get_service()
+            success = service.load_contacts(file_content)
+            
+            if success:
+                return jsonify({
+                    'success': True, 
+                    'total_contacts': len(service.contacts_df)
+                })
+            else:
+                return jsonify({'success': False, 'error': 'Failed to parse Excel file'}), 400
+                
+        return jsonify({'success': False, 'error': 'Invalid file type'}), 400
     except Exception as e:
+        print(f"Upload error: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/connect', methods=['POST'])
