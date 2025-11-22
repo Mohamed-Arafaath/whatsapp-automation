@@ -40,14 +40,24 @@ class WhatsAppService:
         options.add_argument(f"--user-data-dir={session_dir}")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+        
+        # Check if running on Render
+        if os.environ.get('RENDER'):
+            options.binary_location = "/usr/bin/google-chrome"
+            options.add_argument("--headless=new")  # Headless mode is required on Render
         
         os.makedirs(session_dir, exist_ok=True)
         
-        self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
-            options=options
-        )
-        self.driver.get("https://web.whatsapp.com")
+        try:
+            self.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=options
+            )
+            self.driver.get("https://web.whatsapp.com")
+        except Exception as e:
+            self.log(f"Failed to start driver: {str(e)}")
+            raise e
         
     def check_connection(self):
         """Check if WhatsApp Web is connected."""
