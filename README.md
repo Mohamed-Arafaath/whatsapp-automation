@@ -4,23 +4,22 @@ A powerful, user-friendly tool to automate WhatsApp messages using Selenium and 
 
 ## 📂 Project Structure
 
-- **`Cloud/`**: Configuration files for deploying to the cloud (Render.com).
-- **`Local/`**: Scripts to run the app on your own computer.
-    - **`Windows/`**: Double-click scripts for Windows.
-    - **`Mac/`**: Terminal scripts for Mac/Linux.
-- **`src/`**: The source code of the application.
+- **`Cloud/`**: Contains everything needed for Render deployment.
+- **`Local/`**:
+    - **`Windows/`**: Contains the App + Run scripts for Windows.
+    - **`Mac/`**: Contains the App + Run scripts for Mac.
 
 ## 🚀 How to Run
 
 ### Option 1: Run Locally (Your Computer)
 
 **Windows:**
-1. Go to `Local/Windows`.
+1. Download the `Local/Windows` folder.
 2. Run `SETUP_WINDOWS.bat` (First time only).
 3. Run `RUN_WINDOWS.bat`.
 
 **Mac:**
-1. Go to `Local/Mac`.
+1. Download the `Local/Mac` folder.
 2. Run `./SETUP_MAC.sh` (First time only).
 3. Run `./RUN_MAC.sh`.
 

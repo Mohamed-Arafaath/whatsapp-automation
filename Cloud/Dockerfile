@@ -18,10 +18,10 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --d
 
 WORKDIR /app
 
-COPY src/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/ .
+COPY . .
 
 # Set environment variable for the app to know it's on Render
 ENV RENDER=true

@@ -44,13 +44,13 @@ fi
 echo ""
 echo "Installing Python dependencies..."
 
-if [ ! -f "../../src/requirements.txt" ]; then
-    echo "❌ Error: Cannot find src/requirements.txt"
-    echo "⚠️  Make sure you downloaded the ENTIRE project folder, not just this script!"
+if [ ! -f "requirements.txt" ]; then
+    echo "❌ Error: Cannot find requirements.txt"
+    echo "⚠️  Make sure you are running this script from inside the folder!"
     exit 1
 fi
 
-pip3 install -r ../../src/requirements.txt
+pip3 install -r requirements.txt
 
 echo ""
 echo "=========================================="

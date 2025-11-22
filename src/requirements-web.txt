@@ -1,8 +1,0 @@
-Flask
-Flask-CORS
-qrcode
-Pillow
-pandas
-selenium
-webdriver-manager
-openpyxl

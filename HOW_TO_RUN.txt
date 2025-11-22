@@ -16,26 +16,23 @@ HOW TO START
 HOW TO START
 ------------
 
+HOW TO START
+------------
+
 OPTION 1: Mac
-1. Open Terminal.
-2. Navigate to "Local/Mac" folder.
+1. Download the "Local/Mac" folder.
+2. Open Terminal and go to that folder.
 3. First time only: Run ./SETUP_MAC.sh
-   (This installs Python, Chrome, and everything else)
 4. To start app: Run ./RUN_MAC.sh
 
 OPTION 2: Windows
-1. Navigate to "Local/Windows" folder.
+1. Download the "Local/Windows" folder.
 2. First time only: Double-click "SETUP_WINDOWS.bat"
-   (This installs Python, Chrome, and everything else)
 3. To start app: Double-click "RUN_WINDOWS.bat"
 
-OPTION 3: Manual (Any OS)
-1. Open Terminal/Command Prompt.
-2. Navigate to "src" folder.
-3. Install dependencies:
-   pip install -r requirements.txt
-4. Start the app:
-   python app.py
+OPTION 3: Cloud (Render)
+1. Use the "Cloud" folder for deployment.
+2. Set Dockerfile Path to "Cloud/Dockerfile".
 
 Once running, open your browser and go to:
 http://localhost:5001
