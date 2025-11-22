@@ -43,7 +43,7 @@ fi
 
 echo ""
 echo "Installing Python dependencies..."
-pip3 install -r requirements.txt
+pip3 install -r ../../src/requirements.txt
 
 echo ""
 echo "=========================================="

@@ -38,7 +38,7 @@ if %errorlevel% neq 0 (
 
 echo.
 echo Installing Python dependencies...
-pip install -r requirements.txt
+pip install -r ..\..\src\requirements.txt
 
 echo.
 echo ==========================================
