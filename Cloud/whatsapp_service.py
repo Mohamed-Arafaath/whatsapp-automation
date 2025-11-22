@@ -26,6 +26,7 @@ class WhatsAppService:
         self.contacts_df = None
         self.message_template = ""
         self.contact_count = 0
+        self.media_path = None  # Store media file path
         
     def log(self, message):
         """Add a log message."""
@@ -120,8 +121,9 @@ class WhatsAppService:
             self.log(f"Error loading Excel: {e}")
             return False
     
+    
     def send_message(self, phone, name):
-        """Send a message to a specific phone number."""
+        """Send a message (with optional media) to a specific phone number."""
         try:
             # Clean phone number
             phone = str(phone).replace('.0', '')
@@ -134,15 +136,10 @@ class WhatsAppService:
             self.log(f"Sending to {name} ({clean_phone})...")
             self.progress["current"] = f"{name} ({clean_phone})"
             
-            # Encode message
-            encoded_message = urllib.parse.quote(self.message_template)
-            
-            # Navigate to send url
-            url = f"https://web.whatsapp.com/send?phone={clean_phone}&text={encoded_message}"
+            # Navigate to chat (without message in URL for media support)
+            url = f"https://web.whatsapp.com/send?phone={clean_phone}"
             self.driver.get(url)
-            
-            # Wait for page to load
-            time.sleep(1)  # Optimized: reduced from 3s to 1s
+            time.sleep(1)  # Optimized page load wait
             
             # Check for invalid number
             try:
@@ -152,49 +149,104 @@ class WhatsAppService:
             except:
                 pass
             
-            # Wait for input box
-            WebDriverWait(self.driver, 20).until(
+            # Wait for input box to be ready
+            input_box = WebDriverWait(self.driver, 20).until(
                 EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]'))
             )
             
-            # Try to click send button (multiple strategies)
-            sent = False
-            
-            # Strategy 1: Send icon
-            try:
-                send_button = WebDriverWait(self.driver, 5).until(
-                    EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]'))
-                )
-                send_button.click()
-                sent = True
-            except:
-                pass
-            
-            # Strategy 2: Enter key
-            if not sent:
+            # Case 1: Media attachment
+            if self.media_path and os.path.exists(self.media_path):
                 try:
-                    input_box = self.driver.find_element(By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]')
-                    input_box.send_keys(Keys.RETURN)
-                    sent = True
-                except:
-                    pass
+                    self.log(f"Attaching media: {os.path.basename(self.media_path)}")
+                    
+                    # Click attach button (paperclip icon)
+                    attach_btn = WebDriverWait(self.driver, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, '//div[@title="Attach" or @aria-label="Attach"]'))
+                    )
+                    attach_btn.click()
+                    time.sleep(0.5)
+                    
+                    # Find and send file path to the hidden file input
+                    media_input = WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]'))
+                    )
+                    media_input.send_keys(os.path.abspath(self.media_path))
+                    time.sleep(2)  # Wait for media preview to load
+                    
+                    # Add caption (message text) if provided
+                    if self.message_template:
+                        try:
+                            caption_box = WebDriverWait(self.driver, 10).until(
+                                EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]'))
+                            )
+                            caption_box.send_keys(self.message_template)
+                            time.sleep(0.3)
+                        except Exception as e:
+                            self.log(f"Warning: Could not add caption: {e}")
+                    
+                    # Click send button
+                    send_btn = WebDriverWait(self.driver, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]'))
+                    )
+                    send_btn.click()
+                    
+                    time.sleep(0.5)
+                    self.log(f"✅ Sent media + message to {name}")
+                    return True
+                    
+                except Exception as e:
+                    self.log(f"❌ Failed to send media: {e}")
+                    return False
             
-            if sent:
-                time.sleep(0.5)  # Optimized: reduced from 2s to 0.5s
-                self.log(f"✅ Sent to {name}")
-                return True
+            # Case 2: Text-only message
             else:
-                self.log(f"❌ Failed to send to {name}")
-                return False
+                try:
+                    # Type message in input box
+                    input_box.send_keys(self.message_template)
+                    time.sleep(0.3)
+                    
+                    # Try to send message
+                    sent = False
+                    
+                    # Strategy 1: Click send icon
+                    try:
+                        send_button = WebDriverWait(self.driver, 5).until(
+                            EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]'))
+                        )
+                        send_button.click()
+                        sent = True
+                    except:
+                        pass
+                    
+                    # Strategy 2: Press Enter key
+                    if not sent:
+                        try:
+                            input_box.send_keys(Keys.RETURN)
+                            sent = True
+                        except:
+                            pass
+                    
+                    if sent:
+                        time.sleep(0.5)
+                        self.log(f"✅ Sent to {name}")
+                        return True
+                    else:
+                        self.log(f"❌ Failed to send to {name}")
+                        return False
+                        
+                except Exception as e:
+                    self.log(f"❌ Error sending text: {e}")
+                    return False
                 
         except Exception as e:
             self.log(f"❌ Error: {e}")
             return False
     
-    def start_sending(self, message, count):
+    def start_sending(self, message, count, media_path=None):
         """Start sending messages in a background thread."""
         self.message_template = message
         self.contact_count = count
+        self.media_path = media_path  # Store media path
         self.should_stop = False
         self.is_running = True
         
