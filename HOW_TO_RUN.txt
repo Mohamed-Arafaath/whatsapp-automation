@@ -26,9 +26,10 @@ OPTION 1: Mac
 4. To start app: Run ./RUN_MAC.sh
 
 OPTION 2: Windows
-1. Download the "Local/Windows" folder.
-2. First time only: Double-click "SETUP_WINDOWS.bat"
-3. To start app: Double-click "RUN_WINDOWS.bat"
+1. Download the `Local/Windows` folder.
+2. Double‑click `SETUP_WINDOWS.bat` (first time only). This installs Python, Chrome, and required Python packages.
+3. After setup completes, double‑click `RUN_WINDOWS.bat` to start the Flask app.
+4. Open your browser and go to `http://localhost:5001`.
 
 OPTION 3: Cloud (Render)
 1. Use the "Cloud" folder for deployment.

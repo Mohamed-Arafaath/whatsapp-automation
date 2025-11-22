@@ -13,10 +13,25 @@ A powerful, user-friendly tool to automate WhatsApp messages using Selenium and 
 
 ### Option 1: Run Locally (Your Computer)
 
+## 🚀 How to Run
+
+### Option 1: Run Locally (Your Computer)
+
 **Windows:**
 1. Download the `Local/Windows` folder.
-2. Run `SETUP_WINDOWS.bat` (First time only).
-3. Run `RUN_WINDOWS.bat`.
+2. Double‑click `SETUP_WINDOWS.bat` (first time only). This will install Python, Chrome, and required Python packages.
+3. After the setup completes, double‑click `RUN_WINDOWS.bat` to start the Flask app.
+4. Open your browser and navigate to `http://localhost:5001`.
+
+**Mac:**
+1. Download the `Local/Mac` folder.
+2. Run `./SETUP_MAC.sh` (first time only).
+3. Run `./RUN_MAC.sh` to start the app.
+4. Open your browser and go to `http://localhost:5001`.
+
+### Option 2: Deploy to Cloud (Render)
+
+See `DEPLOYMENT_GUIDE.md` for full instructions. **Important**: Set the Dockerfile path to `Cloud/Dockerfile` in Render settings.
 
 **Mac:**
 1. Download the `Local/Mac` folder.
